@@ -1,0 +1,113 @@
+{
+  "name": "QuoteRequest",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Full name of the requester"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone or WhatsApp number"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country of the requester"
+    },
+    "requester_type": {
+      "type": "string",
+      "enum": [
+        "buyer",
+        "supplier",
+        "partner"
+      ],
+      "description": "Type of requester"
+    },
+    "product_category": {
+      "type": "string",
+      "description": "Product category"
+    },
+    "product_request": {
+      "type": "string",
+      "description": "Specific product request details"
+    },
+    "brand_specs": {
+      "type": "string",
+      "description": "Brand or specification details"
+    },
+    "estimated_quantity": {
+      "type": "string",
+      "description": "Estimated quantity needed"
+    },
+    "destination": {
+      "type": "string",
+      "description": "Desired destination"
+    },
+    "timeline": {
+      "type": "string",
+      "description": "Desired timeline"
+    },
+    "is_importer_of_record": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "unsure"
+      ],
+      "description": "Whether the requester is the importer of record"
+    },
+    "has_import_permits": {
+      "type": "string",
+      "enum": [
+        "yes",
+        "no",
+        "not_applicable",
+        "unsure"
+      ],
+      "description": "Whether they have required import permits"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "sourcing_only",
+        "sourcing_and_export"
+      ],
+      "description": "Type of service needed"
+    },
+    "message": {
+      "type": "string",
+      "description": "Additional message"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded file URL for product lists or spec sheets"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewing",
+        "quoted",
+        "approved",
+        "completed",
+        "declined"
+      ],
+      "default": "new",
+      "description": "Status of the quote request"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "product_request"
+  ]
+}
