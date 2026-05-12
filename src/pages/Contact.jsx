@@ -1,71 +1,163 @@
-import { useState } from 'react';
+import React, { useState } from "react";
+import PageHero from "../components/shared/PageHero";
+import { Search, Handshake, ShoppingBag, HelpCircle, MapPin, CheckCircle, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-const initialForm = {
-  name: '',
-  company: '',
-  email: '',
-  phone: '',
-  productInterest: '',
-  originCountry: '',
-  destinationCountry: '',
-  message: '',
-};
+const contactTypes = [
+  { icon: Search, title: "Sourcing Requests", desc: "Looking to source U.S. products for your business.", value: "sourcing" },
+  { icon: Handshake, title: "Supplier Partnerships", desc: "U.S. suppliers interested in working with us.", value: "supplier_partnership" },
+  { icon: ShoppingBag, title: "Wholesale Opportunities", desc: "Wholesale buyers interested in Sri Lankan products.", value: "wholesale" },
+  { icon: HelpCircle, title: "General Inquiries", desc: "Questions about our services or process.", value: "general" },
+];
 
 export default function Contact() {
-  const [form, setForm] = useState(initialForm);
+  const [form, setForm] = useState({
+    name: "",
+    company: "",
+    email: "",
+    phone: "",
+    inquiry_type: "general",
+    message: "",
+  });
+
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
-  }
+  const update = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
 
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!form.name || !form.email || !form.message) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setSubmitting(true);
+
+    const savedMessages = JSON.parse(localStorage.getItem("litc_contact_messages") || "[]");
+    savedMessages.push({
+      ...form,
+      submitted_at: new Date().toISOString(),
+    });
+    localStorage.setItem("litc_contact_messages", JSON.stringify(savedMessages));
+
+    setSubmitting(false);
     setSubmitted(true);
-    setForm(initialForm);
-  }
+    toast.success("Message saved locally. Connect a production form endpoint before launch.");
+  };
 
   return (
-    <main className="bg-white text-slate-950">
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-amber-600">
-          Contact
-        </p>
+    <>
+      <PageHero
+        headline="Contact Our Trade Coordination Team"
+        subheadline="Whether you're a buyer, supplier, or partner — we'd like to hear from you."
+        compact
+      />
 
-        <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight md:text-6xl">
-          Request sourcing or trade facilitation support.
-        </h1>
+      <section className="bg-background py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {contactTypes.map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() => update("inquiry_type", item.value)}
+                className={`rounded-xl border bg-card p-5 text-left transition-all ${
+                  form.inquiry_type === item.value
+                    ? "border-accent shadow-md"
+                    : "border-border hover:border-accent/30"
+                }`}
+              >
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10">
+                  <item.icon className="h-5 w-5 text-accent" />
+                </div>
+                <h3 className="mb-1 text-sm font-semibold text-foreground">{item.title}</h3>
+                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              </button>
+            ))}
+          </div>
 
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-          Tell us what product, buyer, seller, or shipping coordination support you need. LITC helps buyers and sellers connect across international markets and coordinate with qualified third-party providers where needed.
-        </p>
+          <div className="grid gap-12 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              {submitted ? (
+                <div className="py-16 text-center">
+                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+                    <CheckCircle className="h-8 w-8 text-accent" />
+                  </div>
+                  <h3 className="mb-3 text-2xl font-bold text-foreground">Message Received</h3>
+                  <p className="text-muted-foreground">
+                    This static version saved the message locally. Connect Formspree, Firebase, or another endpoint before production launch.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="space-y-2">
+                      <span className="text-sm font-medium">Name *</span>
+                      <input className="w-full rounded-md border border-input bg-background px-3 py-2" value={form.name} onChange={(e) => update("name", e.target.value)} />
+                    </label>
 
-        <form onSubmit={handleSubmit} className="mt-12 grid gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-2">
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="company" placeholder="Company" value={form.company} onChange={handleChange} />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="productInterest" placeholder="Product or service interest" value={form.productInterest} onChange={handleChange} />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="originCountry" placeholder="Origin country" value={form.originCountry} onChange={handleChange} />
-          <input className="rounded-xl border border-slate-300 px-4 py-3" name="destinationCountry" placeholder="Destination country" value={form.destinationCountry} onChange={handleChange} />
-          <textarea className="min-h-36 rounded-xl border border-slate-300 px-4 py-3 md:col-span-2" name="message" placeholder="Message" value={form.message} onChange={handleChange} required />
+                    <label className="space-y-2">
+                      <span className="text-sm font-medium">Company</span>
+                      <input className="w-full rounded-md border border-input bg-background px-3 py-2" value={form.company} onChange={(e) => update("company", e.target.value)} />
+                    </label>
 
-          <button className="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 md:w-fit" type="submit">
-            Submit Inquiry
-          </button>
+                    <label className="space-y-2">
+                      <span className="text-sm font-medium">Email *</span>
+                      <input type="email" className="w-full rounded-md border border-input bg-background px-3 py-2" value={form.email} onChange={(e) => update("email", e.target.value)} />
+                    </label>
 
-          {submitted && (
-            <p className="text-sm font-medium text-emerald-700 md:col-span-2">
-              Thank you. Your inquiry has been received. Our team will review the details and follow up regarding sourcing, trade support, or logistics coordination needs.
-            </p>
-          )}
-        </form>
+                    <label className="space-y-2">
+                      <span className="text-sm font-medium">Phone</span>
+                      <input className="w-full rounded-md border border-input bg-background px-3 py-2" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
+                    </label>
+                  </div>
 
-        <p className="mt-8 max-w-4xl text-sm leading-6 text-slate-500">
-          Link International Trading Company provides sourcing support, buyer-seller connection support, trade coordination, and commercial facilitation services. LITC is not the buyer, seller, manufacturer, shipper, carrier, freight forwarder, customs broker, importer of record, or exporter of record unless expressly agreed in writing. Shipping, customs, insurance, legal, tax, and regulatory services may require qualified third-party providers.
-        </p>
+                  <label className="space-y-2 block">
+                    <span className="text-sm font-medium">Inquiry Type</span>
+                    <select className="w-full rounded-md border border-input bg-background px-3 py-2" value={form.inquiry_type} onChange={(e) => update("inquiry_type", e.target.value)}>
+                      <option value="sourcing">Sourcing Request</option>
+                      <option value="supplier_partnership">Supplier Partnership</option>
+                      <option value="wholesale">Wholesale Opportunity</option>
+                      <option value="general">General Inquiry</option>
+                    </select>
+                  </label>
+
+                  <label className="space-y-2 block">
+                    <span className="text-sm font-medium">Message *</span>
+                    <textarea className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2" value={form.message} onChange={(e) => update("message", e.target.value)} />
+                  </label>
+
+                  <button type="submit" disabled={submitting} className="flex h-12 w-full items-center justify-center rounded-md bg-accent font-semibold text-accent-foreground hover:bg-accent/90">
+                    {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : "Send Message"}
+                  </button>
+                </form>
+              )}
+            </div>
+
+            <div>
+              <div className="rounded-2xl bg-primary p-8 text-primary-foreground">
+                <h3 className="mb-4 text-xl font-bold">Location</h3>
+                <div className="mb-6 flex items-start gap-3">
+                  <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                  <div>
+                    <p className="font-medium">Houston, Texas</p>
+                    <p className="mt-1 text-sm text-primary-foreground/60">
+                      Serving U.S. ↔ Sri Lanka trade relationships
+                    </p>
+                  </div>
+                </div>
+                <p className="border-t border-white/10 pt-6 text-sm leading-relaxed text-primary-foreground/60">
+                  Our Houston-based team coordinates sourcing, supplier communication, and export logistics support for the U.S.–Sri Lanka trade lane.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-    </main>
+    </>
   );
 }

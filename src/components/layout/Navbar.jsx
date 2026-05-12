@@ -1,17 +1,8 @@
-// src/components/layout/Navbar.jsx
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { ChevronDown, Menu, X } from "lucide-react";
+
+const NAV_HEIGHT = 76;
 
 const mainLinks = [
   { label: "Home", path: "/" },
@@ -41,182 +32,156 @@ const mainLinks = [
 ];
 
 export default function Navbar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    handleScroll();
+  const isHome = location.pathname === "/";
+  const lightNav = !isHome || scrolled;
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 48);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    setOpen(false);
+    setMobileOpen(false);
   }, [location.pathname]);
 
-  const navTextClass = scrolled
-    ? "text-slate-900 hover:text-amber-700"
+  const navShellClass = lightNav
+    ? "border-slate-200 bg-white text-slate-900 shadow-sm"
+    : "border-white/10 bg-[#14284b]/72 text-white backdrop-blur-md";
+
+  const linkBase = lightNav
+    ? "text-slate-700 hover:text-amber-600"
     : "text-white/90 hover:text-amber-300";
 
-  const activeTextClass = scrolled
-    ? "text-amber-700"
-    : "text-amber-300";
+  const linkActive = lightNav ? "text-amber-600" : "text-amber-400";
+
+  const getLinkClass = ({ isActive }) =>
+    `rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
+      isActive ? linkActive : linkBase
+    }`;
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-transparent/95 backdrop-blur-md shadow-sm border-b border-white/10"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/images/logo/logo.png" alt="Link International" className="w-10 h-10 object-contain" />
-
-            <div className="hidden sm:block">
-              <span
-                className={`font-display font-semibold text-lg leading-tight ${
-                  scrolled ? "text-slate-950" : "text-white"
-                }`}
-              >
-                
-              </span>
-              <span
-                className={`block text-[10px] tracking-widest uppercase ${
-                  scrolled ? "text-slate-500" : "text-white/55"
-                }`}
-              >
-                
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="hidden lg:block">
-            <NavigationMenu>
-              <NavigationMenuList className="gap-0">
-                {mainLinks.map((link) =>
-                  link.children ? (
-                    <NavigationMenuItem key={link.label}>
-                      <NavigationMenuTrigger
-                        className={`bg-transparent px-3 py-2 text-sm font-medium transition-colors hover:bg-transparent data-[state=open]:bg-transparent ${
-                          location.pathname === link.path ? activeTextClass : navTextClass
-                        }`}
-                      >
-                        {link.label}
-                      </NavigationMenuTrigger>
-
-                      <NavigationMenuContent>
-                        <ul className="w-64 p-2 bg-transparent border border-slate-200 shadow-xl rounded-lg">
-                          {link.children.map((child) => (
-                            <li key={child.path}>
-                              <NavigationMenuLink asChild>
-                                <Link
-                                  to={child.path}
-                                  className="block px-3 py-2 text-sm text-slate-800 rounded-md hover:bg-amber-50 hover:text-amber-700 transition-colors"
-                                >
-                                  {child.label}
-                                </Link>
-                              </NavigationMenuLink>
-                            </li>
-                          ))}
-                        </ul>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                  ) : (
-                    <NavigationMenuItem key={link.label}>
-                      <Link
-                        to={link.path}
-                        className={`text-sm font-medium px-3 py-2 rounded-md transition-colors ${
-                          location.pathname === link.path ? activeTextClass : navTextClass
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    </NavigationMenuItem>
-                  )
-                )}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </nav>
-
-          {/* CTA */}
-          <div className="hidden lg:block">
-            <Link to="/request-quote">
-              <Button className="bg-amber-500 text-slate-950 hover:bg-amber-400 font-semibold text-sm px-5 shadow-sm">
-                Request a Quote
-              </Button>
+    <>
+      <header
+        className={`fixed left-0 right-0 top-0 z-50 border-b transition-all duration-300 ${navShellClass}`}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-[76px] items-center justify-between">
+            <Link to="/" className="flex items-center">
+              <img
+                src="/images/logo/logo.png"
+                alt="Link International Trading Company"
+                className="h-12 w-12 object-contain"
+              />
             </Link>
-          </div>
 
-          {/* Mobile Menu */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                className={scrolled ? "text-slate-900" : "text-white"}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
+            <nav className="hidden items-center gap-2 lg:flex">
+              {mainLinks.map((item) =>
+                item.children ? (
+                  <div key={item.label} className="group relative">
+                    <button
+                      type="button"
+                      className={`inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors ${linkBase}`}
+                    >
+                      {item.label}
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
 
-            <SheetContent side="right" className="w-80 p-0">
-              <div className="p-6 border-b">
-                <span className="font-display font-semibold text-lg">Link International</span>
-                <span className="block text-xs tracking-widest uppercase text-slate-500">
-                  Trading Company
-                </span>
-              </div>
-
-              <nav className="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-160px)]">
-                {mainLinks.map((link) => (
-                  <div key={link.label}>
-                    {link.children ? (
-                      <div>
-                        <span className="block px-3 py-2 text-sm font-semibold text-slate-500 uppercase tracking-wider">
-                          {link.label}
-                        </span>
-
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.path}
-                            to={child.path}
-                            className="block px-3 py-2 pl-6 text-sm rounded-md text-slate-800 hover:bg-amber-50 hover:text-amber-700"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    ) : (
-                      <Link
-                        to={link.path}
-                        className="block px-3 py-2 text-sm font-medium rounded-md text-slate-800 hover:bg-amber-50 hover:text-amber-700"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
+                    <div className="invisible absolute left-0 top-full min-w-[240px] translate-y-2 rounded-lg border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                      {item.children.map((child) => (
+                        <NavLink
+                          key={child.path}
+                          to={child.path}
+                          className={({ isActive }) =>
+                            `block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                              isActive
+                                ? "bg-amber-50 text-amber-700"
+                                : "text-slate-800 hover:bg-amber-50 hover:text-amber-700"
+                            }`
+                          }
+                        >
+                          {child.label}
+                        </NavLink>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </nav>
+                ) : (
+                  <NavLink key={item.path} to={item.path} className={getLinkClass}>
+                    {item.label}
+                  </NavLink>
+                )
+              )}
+            </nav>
 
-              <div className="p-4 border-t">
-                <Link to="/request-quote">
-                  <Button className="w-full bg-amber-500 text-slate-950 hover:bg-amber-400 font-semibold">
-                    Request a Quote
-                  </Button>
-                </Link>
-              </div>
-            </SheetContent>
-          </Sheet>
+            <Link
+              to="/request-quote"
+              className="hidden bg-amber-500 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-400 lg:inline-flex"
+            >
+              Request a Quote
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => setMobileOpen((value) => !value)}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-md border lg:hidden ${
+                lightNav
+                  ? "border-slate-300 text-slate-900"
+                  : "border-white/20 text-white"
+              }`}
+              aria-label="Toggle navigation"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+
+        {mobileOpen && (
+          <div className="border-t border-slate-200 bg-white px-6 py-5 lg:hidden">
+            <nav className="flex flex-col gap-2">
+              {mainLinks.map((item) =>
+                item.children ? (
+                  <div key={item.label}>
+                    <div className="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+                      {item.label}
+                    </div>
+                    {item.children.map((child) => (
+                      <NavLink
+                        key={child.path}
+                        to={child.path}
+                        className="block rounded-md px-6 py-2 text-sm font-medium text-slate-800 hover:bg-amber-50 hover:text-amber-700"
+                      >
+                        {child.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                ) : (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className="rounded-md px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-amber-50 hover:text-amber-700"
+                  >
+                    {item.label}
+                  </NavLink>
+                )
+              )}
+
+              <Link
+                to="/request-quote"
+                className="mt-3 inline-flex justify-center bg-amber-500 px-5 py-3 text-sm font-bold text-slate-950"
+              >
+                Request a Quote
+              </Link>
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {!isHome && <div style={{ height: NAV_HEIGHT }} aria-hidden="true" />}
+    </>
   );
 }
