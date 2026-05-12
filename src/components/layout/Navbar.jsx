@@ -69,15 +69,15 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200"
+          ? "bg-transparent/95 backdrop-blur-md shadow-sm border-b border-white/10"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-16 lg:h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/images/logo/logo.png" alt="Link International" className="w-8 h-8 object-contain" />
+            <img src="/images/logo/logo.png" alt="Link International" className="w-10 h-10 object-contain" />
 
             <div className="hidden sm:block">
               <span
@@ -85,14 +85,14 @@ export default function Navbar() {
                   scrolled ? "text-slate-950" : "text-white"
                 }`}
               >
-                Link International
+                
               </span>
               <span
                 className={`block text-[10px] tracking-widest uppercase ${
                   scrolled ? "text-slate-500" : "text-white/55"
                 }`}
               >
-                Trading Company
+                
               </span>
             </div>
           </Link>
@@ -113,7 +113,7 @@ export default function Navbar() {
                       </NavigationMenuTrigger>
 
                       <NavigationMenuContent>
-                        <ul className="w-64 p-2 bg-white border border-slate-200 shadow-xl rounded-lg">
+                        <ul className="w-64 p-2 bg-transparent border border-slate-200 shadow-xl rounded-lg">
                           {link.children.map((child) => (
                             <li key={child.path}>
                               <NavigationMenuLink asChild>

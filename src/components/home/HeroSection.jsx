@@ -1,73 +1,59 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-primary text-primary-foreground">
-      {/* Background elements */}
-      <div className="absolute inset-0 opacity-[0.03]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
-      </div>
-      <div className="absolute top-0 right-0 w-2/5 h-full bg-gradient-to-l from-accent/5 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
+    <section className="relative w-full overflow-hidden bg-[#13233f] text-white">
+      <div className="relative h-[clamp(560px,56.25vw,760px)] w-full overflow-hidden">
+        <img
+          src="/images/hero/home-hero.png"
+          alt="International cargo ship and global trade routes"
+          className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-[60%_center] lg:object-center"
+        />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-6">
-              <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-xs font-medium text-accent tracking-wide">Houston, TX — Sri Lanka Trade Lane</span>
-            </div>
+        <div className="absolute inset-0 bg-[#13233f]/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#13233f]/96 via-[#13233f]/72 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#13233f]/75 via-transparent to-[#13233f]/35" />
 
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]">
-              Global Product Sourcing & International{" "}
-              <span className="text-accent">Trade Solutions</span>
-            </h1>
+        <div className="absolute inset-0 z-10">
+          <div className="mx-auto flex h-full w-full max-w-7xl items-center px-5 sm:px-8 lg:px-10">
+            <div className="max-w-[680px]">
+              <div className="mb-3 inline-flex items-center rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-sm sm:mb-4 sm:text-xs sm:tracking-[0.22em]">
+                Houston, TX — Sri Lanka Trade Lane
+              </div>
 
-            <p className="mt-6 text-lg md:text-xl text-primary-foreground/70 leading-relaxed max-w-xl">
-              Connecting businesses worldwide with reliable product sourcing, export coordination, and international logistics support across global trade lanes.
-            </p>
+              <h1 className="text-[42px] font-semibold leading-[0.94] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                <span className="block">Global Product</span>
+                <span className="block">Sourcing &amp;</span>
+                <span className="block">
+                  International <span className="text-amber-400">Trade</span>
+                </span>
+                <span className="block text-amber-400">Solutions</span>
+              </h1>
 
-            <div className="flex flex-wrap gap-4 mt-10">
-              <Link to="/request-quote">
-                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-7 h-13 text-base gap-2 shadow-lg shadow-accent/20">
-                  Request a Sourcing Quote <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/how-it-works">
-                <Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-medium px-7 h-13 text-base">
+              <p className="mt-4 max-w-xl text-sm leading-6 text-slate-100 sm:mt-5 sm:text-lg sm:leading-7">
+                Connecting businesses worldwide with reliable product sourcing,
+                export coordination, and international logistics support across
+                global trade lanes.
+              </p>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-7 sm:gap-4">
+                <a
+                  href="/contact"
+                  className="inline-flex items-center gap-2 rounded-md bg-amber-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-amber-400 sm:px-5 sm:py-3"
+                >
+                  Request a Sourcing Quote
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+
+                <a
+                  href="/how-it-works"
+                  className="inline-flex items-center rounded-md border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10 sm:px-5 sm:py-3"
+                >
                   How It Works
-                </Button>
-              </Link>
+                </a>
+              </div>
             </div>
-          </motion.div>
-
-          {/* Right side — hero image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="hidden lg:block"
-          >
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-3xl" />
-              <img
-                src="/images/images/hero/home-hero.png"
-                alt="Global trade and logistics"
-                className="relative rounded-3xl border border-white/10 w-full h-96 object-cover shadow-2xl"
-              />
-            </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
