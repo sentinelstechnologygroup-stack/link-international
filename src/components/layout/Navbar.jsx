@@ -77,7 +77,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/images/link-international-logo.png" alt="Link International" className="w-8 h-8 object-contain" />
+            <img src="/images/logo/logo.png" alt="Link International" className="w-8 h-8 object-contain" />
 
             <div className="hidden sm:block">
               <span

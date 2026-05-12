@@ -62,7 +62,7 @@ export default function HeroSection() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-3xl" />
               <img
-                src="/images/link-international-hero.png"
+                src="/images/images/hero/home-hero.png"
                 alt="Global trade and logistics"
                 className="relative rounded-3xl border border-white/10 w-full h-96 object-cover shadow-2xl"
               />

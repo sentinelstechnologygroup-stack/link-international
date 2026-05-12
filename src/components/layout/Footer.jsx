@@ -62,7 +62,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2 md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <img src="/images/link-international-logo.png" alt="Link International" className="w-8 h-8 object-contain" />
+              <img src="/images/logo/logo.png" alt="Link International" className="w-8 h-8 object-contain" />
               <span className="font-display font-semibold text-lg">Link International</span>
             </div>
             <p className="text-primary-foreground/70 text-sm leading-relaxed max-w-sm">
