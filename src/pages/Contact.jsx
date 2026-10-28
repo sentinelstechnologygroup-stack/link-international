@@ -20,8 +20,8 @@ export default function Contact() {
     message: "",
   });
 
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting] = useState(false);
+  const [submitted] = useState(false);
 
   const update = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -35,18 +35,7 @@ export default function Contact() {
       return;
     }
 
-    setSubmitting(true);
-
-    const savedMessages = JSON.parse(localStorage.getItem("litc_contact_messages") || "[]");
-    savedMessages.push({
-      ...form,
-      submitted_at: new Date().toISOString(),
-    });
-    localStorage.setItem("litc_contact_messages", JSON.stringify(savedMessages));
-
-    setSubmitting(false);
-    setSubmitted(true);
-    toast.success("Message saved locally. Connect a production form endpoint before launch.");
+    toast.error("Online submissions are not connected yet. Your information has not been sent. Please try again after the website owner connects a contact destination.");
   };
 
   return (

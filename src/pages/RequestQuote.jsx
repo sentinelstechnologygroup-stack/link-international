@@ -18,8 +18,8 @@ const initialForm = {
 
 export default function RequestQuote() {
   const [form, setForm] = useState(initialForm);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitting] = useState(false);
+  const [submitted] = useState(false);
 
   const update = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -42,29 +42,7 @@ export default function RequestQuote() {
       return;
     }
 
-    setSubmitting(true);
-
-    try {
-      const savedRequests = JSON.parse(
-        localStorage.getItem("litc_quote_requests") || "[]"
-      );
-
-      savedRequests.push({
-        ...form,
-        submitted_at: new Date().toISOString(),
-        source: "website_static_form",
-      });
-
-      localStorage.setItem("litc_quote_requests", JSON.stringify(savedRequests));
-
-      setSubmitted(true);
-      toast.success("Quote request saved locally.");
-    } catch (error) {
-      console.error(error);
-      toast.error("Unable to save quote request.");
-    } finally {
-      setSubmitting(false);
-    }
+    toast.error("Online submissions are not connected yet. Your information has not been sent. Please try again after the website owner connects a contact destination.");
   };
 
   return (
