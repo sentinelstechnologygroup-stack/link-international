@@ -2,7 +2,79 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/us-product-sourcing",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/export-coordination",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/sri-lanka-trade-lane",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/product-categories",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/how-it-works",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/for-sri-lanka-buyers",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/for-us-suppliers",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/import-wholesale",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/request-quote",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/accessibility",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/trade-compliance",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/restricted-items-policy",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/cookies",
       "destination": "/index.html"
     }
   ]
